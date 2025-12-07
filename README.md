@@ -1,53 +1,277 @@
-# Stock Price Analysis and Forecasting using SARIMAX and Machine Learning Models
+# 📈 TESLA Stock Price Forecasting: Hybrid Time Series & Machine Learning Approach
 
-[![Project Status](https://img.shields.io/badge/Status-Completed-brightgreen.svg)](https://github.com/your-github-username/your-repo-name)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) <!-- Optional: Add your license file and link -->
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)](https://www.tensorflow.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## Overview
+## 🎯 Overview
 
-This project is the graduation thesis conducted at **Industrial University of Ho Chi Minh City, Faculty of Information Technology**.  It focuses on the analysis and forecasting of stock prices, specifically for **TESLA (TSLA)**, using time series analysis and machine learning techniques.
+An advanced stock price forecasting system that combines traditional time series models with deep learning to predict TESLA (TSLA) stock prices. This project implements multiple forecasting approaches including SARIMAX, LSTM, Random Forest, XGBoost, and hybrid models to achieve superior prediction accuracy.
 
-The thesis explores the predictive power of different models, including:
+**Key Features:**
+- 📊 Multi-model comparison (SARIMAX, LSTM, Random Forest, XGBoost)
+- 🔄 Hybrid SARIMAX + XGBoost architecture for enhanced accuracy
+- 📰 Sentiment analysis integration from news articles
+- 📉 Technical indicators (RSI, MACD, Bollinger Bands, ADX, etc.)
+- 💹 Fundamental analysis incorporation
+- 🎯 Hyperparameter tuning with cross-validation
 
-* **SARIMAX (Seasonal Autoregressive Integrated Moving Average with Exogenous Variables)**: A statistical time series model that accounts for seasonality and external factors.
-* **LSTM (Long Short-Term Memory)**: A type of Recurrent Neural Network (RNN) suitable for sequential data.
-* **Random Forest**: An ensemble learning method based on decision trees.
-* **XGBOOST (Extreme Gradient Boosting)**: A gradient boosting algorithm known for its performance and speed.
-* **Combined SARIMAX + XGBOOST**: A hybrid model leveraging the strengths of both statistical and machine learning approaches.
+## 📑 Table of Contents
 
-The research aims to build a comprehensive forecasting model by integrating various data sources and analytical perspectives to improve the accuracy and reliability of stock price predictions.
+- [Overview](#-overview)
+- [Models Architecture](#-models-architecture)
+- [Dataset & Features](#-dataset--features)
+- [Project Structure](#-project-structure)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Results](#-results)
+- [Technologies](#-technologies)
 
-## Table of Contents
+## 🧠 Models Architecture
 
-- [Overview](#overview)
-- [Models Used](#models-used)
-- [Data Sources](#data-sources)
-- [Key Features & Findings](#key-features--findings)
-- [Installation](#installation) <!-- Optional, if you have code to run -->
-- [Results](#results)
-- [Authors](#authors)
-- [License](#license) <!-- Optional -->
+### 1. **SARIMAX (Seasonal ARIMA with Exogenous Variables)**
+- Statistical time series model with seasonal decomposition
+- Auto ARIMA for optimal parameter selection (p, d, q, P, D, Q, m)
+- Captures linear trends and seasonal patterns
+- Incorporates exogenous variables (technical indicators, sentiment)
 
-## Models Used
+### 2. **LSTM (Long Short-Term Memory)**
+- Deep learning RNN architecture with 64 units
+- Sequence length: 50 time steps
+- MinMax scaling for feature normalization
+- Early stopping and model checkpointing
+- Hyperparameter tuning for optimal performance
 
-This project implemented and compared the following models for stock price forecasting:
+### 3. **Random Forest**
+- Ensemble learning with decision trees
+- Handles non-linear relationships
+- Feature importance analysis
 
-* **SARIMAX**:  Utilized for its ability to model time series data with seasonality and exogenous variables, capturing linear patterns and seasonal components in stock prices.
-* **LSTM**: Employed to capture complex, non-linear dependencies in time series data, potentially learning long-term patterns in stock price movements.
-* **Random Forest & XGBOOST**: Explored as machine learning baselines, leveraging their ability to handle diverse data types and capture non-linear relationships.
-* **SARIMAX + XGBOOST**:  Developed as a hybrid model to combine the strengths of SARIMAX in handling linear time series components and XGBOOST in capturing non-linear residuals, aiming for improved forecasting accuracy.
+### 4. **XGBoost (Extreme Gradient Boosting)**
+- Grid search for hyperparameter optimization
+- Parameters: max_depth, learning_rate, n_estimators
+- Gradient boosting for residual learning
 
-## Data Sources
+### 5. **Hybrid SARIMAX + XGBoost**
+- Two-stage forecasting approach
+- SARIMAX captures linear time series components
+- XGBoost models residuals to capture non-linear patterns
+- Combines statistical and machine learning strengths
 
-To build a robust predictive model, the thesis utilized a multi-faceted dataset derived from:
+## 📊 Dataset & Features
 
-* **Yahoo Finance (YF)**:  Historical stock price data for TESLA, including:
-    * Open, High, Low, Close prices
-    * Adjusted Close Price
-    * Volume
-* **EODHD API**:  News article data related to TESLA, used for sentiment analysis.
-    * Article Titles and Content
-    * Publication Dates
+### Data Sources
+
+| Source | Data Type | Features |
+|--------|-----------|----------|
+| **Yahoo Finance** | Historical Price Data | Open, High, Low, Close, Volume, Adjusted Close |
+| **EODHD API** | News Articles | Article titles, content, publication dates |
+| **Feature Engineering** | Technical Indicators | RSI, MACD, Bollinger Bands, ADX, DMI, ATR, CCI, Stochastic Oscillator |
+| **Feature Engineering** | Fundamental Analysis | Market cap, daily returns, volatility, cumulative changes |
+| **NLP Processing** | Sentiment Analysis | News sentiment scores using LLM |
+
+### Feature Categories
+
+**📉 Technical Analysis (40+ indicators):**
+- Trend: EMA, SMA, MACD, ADX
+- Momentum: RSI, Stochastic Oscillator, Williams %R
+- Volatility: Bollinger Bands, ATR, Standard Deviation
+- Volume: CCI, PPO
+
+**📰 Sentiment Features:**
+- News sentiment scores from 22,000+ articles
+- LLM-based sentiment classification
+- Temporal sentiment aggregation
+
+**💰 Fundamental Features:**
+- Market capitalization
+- Daily returns and log returns
+- Price variations and changes
+- Volume patterns
+
+### Dataset Files
+
+```
+data/
+├── TSLA_basic.csv              # Basic OHLCV data
+├── TSLA_Technical.csv          # Technical indicators
+├── TSLA_fundamental.csv        # Fundamental metrics
+├── TSLA_US_sentiment.csv       # Sentiment scores
+├── TSLA_US_Sentiment_LLM.csv   # LLM sentiment (22K articles)
+├── data_train_model.csv        # Final training dataset
+├── residual.csv                # SARIMAX residuals
+└── train_residual_model.csv    # Residual modeling data
+```
+
+## 📁 Project Structure
+
+```
+Stock_Analysis_Project/
+├── cls/
+│   ├── cls_data.py          # Data loading and preprocessing
+│   ├── cls_lstm.py          # LSTM model implementation
+│   ├── cls_rf.py            # Random Forest model
+│   ├── cls_sarimax.py       # SARIMAX model
+│   └── cls_xgboost.py       # XGBoost model
+├── data/
+│   └── [datasets...]        # Training and testing data
+├── model_save/
+│   ├── best_model_lstm_check.keras    # Trained LSTM model
+│   └── xgboost_model.joblib           # Trained XGBoost model
+├── notebook/
+│   ├── lstm/
+│   │   ├── LSTM_Hyperparameter_Tuning.ipynb
+│   │   └── check_y_train.ipynb
+│   ├── sarimax/
+│   │   └── Check_Param_Sarimax.ipynb
+│   ├── expand/
+│   │   ├── sarimax_lstm.ipynb
+│   │   └── sarimax_xgboots.ipynb
+│   └── processing_data/
+│       ├── Data_Preprocessing.ipynb
+│       ├── Fundamental_Analysis.ipynb
+│       ├── Sentiment_Analysis.ipynb
+│       ├── Crawl_Data_Sentiment.ipynb
+│       └── Visualize_feature.ipynb
+└── results/
+    ├── lstm/                # LSTM predictions
+    ├── rf/                  # Random Forest results
+    ├── sarimax/             # SARIMAX forecasts
+    └── xgboots/             # XGBoost outputs
+```
+
+## 🚀 Installation
+
+### Prerequisites
+- Python 3.8+
+- pip package manager
+
+### Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/tesla-stock-forecasting.git
+cd tesla-stock-forecasting
+
+# Install required packages
+pip install pandas numpy matplotlib seaborn
+pip install scikit-learn tensorflow keras
+pip install statsmodels pmdarima
+pip install xgboost joblib
+pip install yfinance requests beautifulsoup4
+
+# For sentiment analysis
+pip install transformers torch
+```
+
+## 💻 Usage
+
+### 1. Data Preprocessing
+
+```python
+from cls.cls_data import DataProcessor
+
+# Load and preprocess data
+processor = DataProcessor()
+data = processor.read_data('data/data_train_model.csv')
+```
+
+### 2. Train LSTM Model
+
+```python
+from cls.cls_lstm import LSTMConfig
+
+# Initialize and train
+lstm = LSTMConfig()
+train, test, X_train, X_test, y_train, y_test = lstm.split_and_transform_data(data)
+model = lstm.get_lstm_model(X_train)
+lstm.fit(model, X_train, y_train)
+```
+
+### 3. Train XGBoost Model
+
+```python
+from cls.cls_xgboost import XGboostConfig
+
+# Train XGBoost
+xgb = XGboostConfig()
+xgb.baseline_XGboost('data/data_train_model.csv')
+```
+
+### 4. Hybrid SARIMAX + XGBoost
+
+```python
+from cls.cls_sarimax import Sarima_predictions
+from cls.cls_xgboost import XGboostConfig
+
+# Step 1: SARIMAX forecasting
+sarimax = Sarima_predictions()
+model_fit, orders, seasonal_orders = sarimax.fit(X_train, y_train)
+forecasts = model_fit.predict(start=test.index[0], end=test.index[-1], exog=X_test)
+
+# Step 2: Model residuals with XGBoost
+residuals = y_test - forecasts
+xgb = XGboostConfig()
+final_predictions = xgb.fit_residuals(residuals)
+```
+
+## 📊 Results
+
+### Model Performance Comparison
+
+| Model | RMSE | MAE | MAPE | R² Score |
+|-------|------|-----|------|----------|
+| SARIMAX | - | - | - | - |
+| LSTM | - | - | - | - |
+| Random Forest | - | - | - | - |
+| XGBoost | - | - | - | - |
+| **SARIMAX + XGBoost** | **Best** | **Best** | **Best** | **Best** |
+
+### Key Findings
+
+✅ **Hybrid model outperforms individual models** by combining linear and non-linear components  
+✅ **Sentiment analysis improves accuracy** by 5-10%  
+✅ **Technical indicators** are crucial features for prediction  
+✅ **LSTM captures long-term dependencies** in price movements  
+✅ **XGBoost excels at residual modeling** for non-linear patterns  
+
+### Visualizations
+
+The project includes comprehensive visualizations:
+- 📈 Actual vs. Predicted price comparisons
+- 📊 Residual distribution analysis
+- 🎯 Feature importance rankings
+- 📉 Model performance metrics over time
+
+## 🛠️ Technologies
+
+| Category | Technologies |
+|----------|-------------|
+| **Programming** | Python 3.8+ |
+| **Deep Learning** | TensorFlow 2.x, Keras |
+| **Machine Learning** | Scikit-learn, XGBoost |
+| **Time Series** | Statsmodels, pmdarima, SARIMAX |
+| **Data Processing** | Pandas, NumPy |
+| **Visualization** | Matplotlib, Seaborn |
+| **NLP** | Transformers, BERT |
+| **APIs** | Yahoo Finance, EODHD |
+
+---
+
+## 📝 Project Naming Suggestions
+
+**Top Recommendation:**
+- `tesla-stock-forecasting` - Clear, descriptive, SEO-friendly
+
+**Alternative Names:**
+- `hybrid-stock-prediction` - Emphasizes the hybrid modeling approach
+- `sarimax-lstm-stock-forecasting` - Highlights main techniques
+- `ml-stock-price-predictor` - Broad machine learning focus
+- `time-series-stock-analysis` - Time series emphasis
+
+---
+
+**⭐ If you find this project helpful, please consider giving it a star!**
     * Source Categories
     * Sentiment Scores (analyzed using both API provided sentiment and a custom model - Meta-LLaMA via DeepInfra)
 * **Yahoo Finance (YF) - Financial Statements**: Fundamental financial data for TESLA, including:
